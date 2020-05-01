@@ -1,0 +1,47 @@
+sudo apt install openjdk-8-jdk
+
+/usr/lib/jvm/java-8-openjdk-amd64/jre
+
+https://hbase.apache.org/book.html#quickstart
+
+#create directory for data as will clear on reboot otherwise
+sudo mkdir -p /var/hbase
+
+sudo nano conf/hbase-site.xml
+
+<configuration>
+  <property>
+    <name>hbase.tmp.dir</name>
+    <value>/var/hbase</value>
+  </property>
+</configuration>
+
+./bin/hbase shell
+
+sudo apt-get install supervisor
+
+sudo nano /etc/supervisor/conf.d/hbase.conf
+
+
+[program:hbase]
+command=bash -c "/home/azureuser/hbase-2.2.4/bin/start-hbase.sh"
+priority=100
+stdout_logfile=/var/log/hbase.out.log
+stderr_logfile=/var/log/hbase.err.log
+autostart=true
+autorestart=true
+
+
+sudo supervisorctl reread
+sudo supervisorctl update
+
+tail /var/log/hbase.err.log
+
+
+OPENTSDB INIT.D Script
+sudo nano /etc/init.d/opentsdb
+
+sleep 120 at start to wait for hbase to start
+
+
+
